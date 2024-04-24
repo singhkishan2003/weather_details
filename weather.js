@@ -9,6 +9,17 @@ const weather=document.querySelector(".wheather");
 const form=document.querySelector("form");
 const searchbar=document.querySelector("#search-area");
 
+var icon=document.querySelector("#icon");
+
+icon.onclick=function(){
+    document.body.classList.toggle("dark-theme");
+    if(document.body.classList.contains("dark-theme")){
+        icon.src="sun.png";
+    }else{
+        icon.src="moon.png";
+    }
+}
+
 
 form.addEventListener("submit",function(event){
     event.preventDefault();
@@ -25,6 +36,7 @@ const fetchresult = async (targetlocation)=>{
 
     const data=await res.json();
 
+    console.log(data);
     let temp=data.current.temp_c;
     let location_name=data.location.name;
     let time=data.location.localtime;
@@ -34,10 +46,16 @@ const fetchresult = async (targetlocation)=>{
 }
 
 function updatedetails(temp,location_name,time,condition){
-    temperature.innertext=temp;
-    locationtime.innertext=time;
-    weather.innertext=condition;
-    data.innertext=location_name;
+
+    let splitdate=time.split(" ")[0];
+    let splittime=time.split(" ")[1];
+
+    let current_Day=getdayname(new Date(splitdate).getDay());
+    
+    temperature.innerText=temp;
+    locationtime.innerText=`${splitdate} , ${current_Day} , ${splittime}`;
+    weather.innerText=condition;
+    data.innerText=location_name;
 }
 
 
@@ -45,4 +63,25 @@ function searchforlocation(){
     let target =searchbar.value;
     fetchresult(target);
 }
+
 fetchresult(target);
+
+function getdayname(number){
+    switch(number){
+        case 0:
+            return "Sunday";
+        case 1:
+            return "Monday";
+        case 2:
+            return "Tuesday";
+        case 3:
+            return "Wednesday";
+        case 4:
+            return "Thursday";
+        case 5:
+            return "Friday";
+        case 6:
+            return "Saturday";
+            
+    }
+}
